@@ -420,8 +420,8 @@ function getShadow({
   const linearGradient = [
     // [*1] In mobile, it's required for the alpha to be set in opacity prop to work.
     // In web, smaller offsets needs to come before, so offset={0} definition comes first.
-    <Stop style={{opacity:0.5}} offset={0} stopColor={startColorWoOpacity} stopOpacity={startColorOpacity} key='1' />,
-    <Stop style={{opacity:0.5}} offset={1} stopColor={endColorWoOpacity} stopOpacity={endColorOpacity} key='2' />,
+    <Stop offset={0} stopColor={startColorWoOpacity} stopOpacity={startColorOpacity} key='1' />,
+    <Stop offset={1} stopColor={endColorWoOpacity} stopOpacity={endColorOpacity} key='2' />,
   ];
 
   const radialGradient2 = (p: RadialGradientPropsOmited) =>
