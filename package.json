@@ -2,7 +2,7 @@
   "name": "react-native-shadow-2",
   "version": "7.0.8",
   "description": "Cross-platform shadow for React Native. Improved version of the abandoned react-native-shadow package",
-  "main": "index.js",
+  "main": "src/index.js",
   "scripts": {
     "test": ""
   },
