@@ -2,17 +2,9 @@
   "name": "react-native-shadow-2",
   "version": "7.0.8",
   "description": "Cross-platform shadow for React Native. Improved version of the abandoned react-native-shadow package",
-  "main": "lib/index.js",
-  "files": [
-    "/lib"
-  ],
+  "main": "index.js",
   "scripts": {
     "test": "",
-    "clean": "rimraf lib",
-    "build": "npm run clean",
-    "prepare": "npm run build",
-    "prepublishOnly": "npm run test",
-    "sandbox": "npm run --prefix ./sandbox web"
   },
   "repository": {
     "type": "git",
