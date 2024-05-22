@@ -4,7 +4,7 @@
   "description": "Cross-platform shadow for React Native. Improved version of the abandoned react-native-shadow package",
   "main": "index.js",
   "scripts": {
-    "test": "",
+    "test": ""
   },
   "repository": {
     "type": "git",
