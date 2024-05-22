@@ -420,8 +420,8 @@ function getShadow({
   const linearGradient = [
     // [*1] In mobile, it's required for the alpha to be set in opacity prop to work.
     // In web, smaller offsets needs to come before, so offset={0} definition comes first.
-    <Stop offset={0} stopColor={startColorWoOpacity} stopOpacity={startColorOpacity} key='1' />,
-    <Stop offset={1} stopColor={endColorWoOpacity} stopOpacity={endColorOpacity} key='2' />,
+    <Stop style={{opacity:0.5}} offset={0} stopColor={startColorWoOpacity} stopOpacity={startColorOpacity} key='1' />,
+    <Stop style={{opacity:0.5}} offset={1} stopColor={endColorWoOpacity} stopOpacity={endColorOpacity} key='2' />,
   ];
 
   const radialGradient2 = (p: RadialGradientPropsOmited) =>
@@ -456,6 +456,7 @@ function getShadow({
           >
             <Defs>
               <LinearGradient
+                 style={{opacity:0.5}} 
                 id={`start.${idSuffix}`}
                 x1={isRTL ? '0' : '1'}
                 y1='0'
@@ -468,6 +469,7 @@ function getShadow({
             {/* I was using a Mask here to remove part of each side (same size as now, sum of related corners), but,
               just moving the rectangle outside its viewbox is already a mask!! -> svg overflow is cutten away. <- */}
             <Rect
+               style={{opacity:0.5}} 
               width={distance}
               height={height}
               fill={`url(#start.${idSuffix})`}
@@ -483,6 +485,7 @@ function getShadow({
         >
           <Defs>
             <LinearGradient
+               style={{opacity:0.5}} 
               id={`end.${idSuffix}`}
               x1={isRTL ? '1' : '0'}
               y1='0'
@@ -493,6 +496,7 @@ function getShadow({
             </LinearGradient>
           </Defs>
           <Rect
+             style={{opacity:0.5}} 
             width={distance}
             height={height}
             fill={`url(#end.${idSuffix})`}
@@ -512,11 +516,12 @@ function getShadow({
           }}
         >
           <Defs>
-            <LinearGradient id={`top.${idSuffix}`} x1='0' y1='1' x2='0' y2='0'>
+            <LinearGradient style={{opacity:0.5}}  id={`top.${idSuffix}`} x1='0' y1='1' x2='0' y2='0'>
               {linearGradient}
             </LinearGradient>
           </Defs>
           <Rect
+             style={{opacity:0.5}} 
             width={width}
             height={distance}
             fill={`url(#top.${idSuffix})`}
@@ -537,11 +542,12 @@ function getShadow({
             }}
           >
             <Defs>
-              <LinearGradient id={`bottom.${idSuffix}`} x1='0' y1='0' x2='0' y2='1'>
+              <LinearGradient style={{opacity:0.5}}  id={`bottom.${idSuffix}`} x1='0' y1='0' x2='0' y2='1'>
                 {linearGradient}
               </LinearGradient>
             </Defs>
             <Rect
+               style={{opacity:0.5}} 
               width={width}
               height={distance}
               fill={`url(#bottom.${idSuffix})`}
@@ -573,6 +579,7 @@ function getShadow({
             })}
           </Defs>
           <Rect
+             style={{opacity:0.5}} 
             fill={`url(#topStart.${idSuffix})`}
             width={topStartShadow}
             height={topStartShadow}
@@ -599,7 +606,7 @@ function getShadow({
               shadowRadius: topEndShadow,
             })}
           </Defs>
-          <Rect fill={`url(#topEnd.${idSuffix})`} width={topEndShadow} height={topEndShadow} />
+          <Rect style={{opacity:0.5}}  fill={`url(#topEnd.${idSuffix})`} width={topEndShadow} height={topEndShadow} />
         </Svg>
       )}
       {activeCorners.bottomStart && bottomStartShadow > 0 && (
@@ -623,6 +630,7 @@ function getShadow({
             })}
           </Defs>
           <Rect
+             style={{opacity:0.5}} 
             fill={`url(#bottomStart.${idSuffix})`}
             width={bottomStartShadow}
             height={bottomStartShadow}
@@ -650,6 +658,7 @@ function getShadow({
             })}
           </Defs>
           <Rect
+             style={{opacity:0.5}} 
             fill={`url(#bottomEnd.${idSuffix})`}
             width={bottomEndShadow}
             height={bottomEndShadow}
@@ -690,8 +699,9 @@ function getShadow({
               {/* Paint all white, then black on border external areas to erase them */}
               <Rect width={width} height={height} fill='#fff' />
               {/* Remove the corners */}
-              <Rect width={topStart} height={topStart} fill='#000' />
+              <Rect style={{opacity:0.5}}  width={topStart} height={topStart} fill='#000' />
               <Rect
+                 style={{opacity:0.5}} 
                 width={topEnd}
                 height={topEnd}
                 x={width}
@@ -699,6 +709,7 @@ function getShadow({
                 fill='#000'
               />
               <Rect
+                 style={{opacity:0.5}} 
                 width={bottomStart}
                 height={bottomStart}
                 y={height}
@@ -706,6 +717,7 @@ function getShadow({
                 fill='#000'
               />
               <Rect
+                 style={{opacity:0.5}} 
                 width={bottomEnd}
                 height={bottomEnd}
                 x={width}
@@ -716,6 +728,7 @@ function getShadow({
             </Mask>
           </Defs>
           <Rect
+             style={{opacity:0.5}} 
             width={width}
             height={height}
             mask={`url(#maskInside.${idSuffix})`}
