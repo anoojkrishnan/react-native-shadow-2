@@ -190,7 +190,7 @@ function sanitizeRadii({ width, height, radii, }) {
 // We default the props here for a micro improvement in performance. endColorProp default value was the main reason.
 function getShadow({ props, safeRender, width, height, isRTL, distanceProp = 10, startColorProp = '#00000020', endColorProp = colord(startColorProp).alpha(0).toHex(), topStart, topEnd, bottomStart, bottomEnd, activeSides, activeCorners, paintInside, idSuffix, }) {
     // Skip if using safeRender and we still don't have the exact sizes, if we are still on the first render using the relative sizes.
-    let opacityVal = props.opacity ? props.opacity : 0.5;
+    let opacityVal = props.opacity!=undefined ? props.opacity : 0.5;
     if (safeRender && (typeof width === 'string' || typeof height === 'string'))
         return null;
     const distance = R(Math.max(distanceProp, 0)); // Min val as 0
