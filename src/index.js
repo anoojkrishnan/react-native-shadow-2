@@ -102,6 +102,7 @@ function ShadowInner(props) {
     const shadow = useMemo(() => {
         var _a, _b, _c, _d, _e, _f, _g, _h;
         return getShadow({
+            props,
             topStart,
             topEnd,
             bottomStart,
@@ -187,8 +188,9 @@ function sanitizeRadii({ width, height, radii, }) {
 }
 /** The SVG parts. */
 // We default the props here for a micro improvement in performance. endColorProp default value was the main reason.
-function getShadow({ safeRender, width, height, isRTL, distanceProp = 10, startColorProp = '#00000020', endColorProp = colord(startColorProp).alpha(0).toHex(), topStart, topEnd, bottomStart, bottomEnd, activeSides, activeCorners, paintInside, idSuffix, }) {
+function getShadow({ props, safeRender, width, height, isRTL, distanceProp = 10, startColorProp = '#00000020', endColorProp = colord(startColorProp).alpha(0).toHex(), topStart, topEnd, bottomStart, bottomEnd, activeSides, activeCorners, paintInside, idSuffix, }) {
     // Skip if using safeRender and we still don't have the exact sizes, if we are still on the first render using the relative sizes.
+    let opacityVal = props.opacity ? props.opacity : 0.5;
     if (safeRender && (typeof width === 'string' || typeof height === 'string'))
         return null;
     const distance = R(Math.max(distanceProp, 0)); // Min val as 0
@@ -213,8 +215,8 @@ function getShadow({ safeRender, width, height, isRTL, distanceProp = 10, startC
     const linearGradient = [
         // [*1] In mobile, it's required for the alpha to be set in opacity prop to work.
         // In web, smaller offsets needs to come before, so offset={0} definition comes first.
-        <Stop  style={{opacity:0.5}}  offset={0} stopColor={startColorWoOpacity} stopOpacity={startColorOpacity} key='1'/>,
-        <Stop  style={{opacity:0.5}}  offset={1} stopColor={endColorWoOpacity} stopOpacity={endColorOpacity} key='2'/>,
+        <Stop  style={{opacity:opacityVal}}  offset={0} stopColor={startColorWoOpacity} stopOpacity={startColorOpacity} key='1'/>,
+        <Stop  style={{opacity:opacityVal}}  offset={1} stopColor={endColorWoOpacity} stopOpacity={endColorOpacity} key='2'/>,
     ];
     const radialGradient2 = (p) => radialGradient(Object.assign(Object.assign({}, p), { startColorWoOpacity,
         startColorOpacity,
@@ -234,38 +236,38 @@ function getShadow({ safeRender, width, height, isRTL, distanceProp = 10, startC
       {activeSides.start &&
             (typeof height === 'number' ? height > topStart + bottomStart : true) && (<Svg width={distanceWithAdditional} height={heightWithAdditional} style={{ position: 'absolute', start: -distance, top: topStart }}>
             <Defs>
-              <LinearGradient  style={{opacity:0.5}}  id={`start.${idSuffix}`} x1={isRTL ? '0' : '1'} y1='0' x2={isRTL ? '1' : '0'} y2='0'>
+              <LinearGradient  style={{opacity: opacityVal}}  id={`start.${idSuffix}`} x1={isRTL ? '0' : '1'} y1='0' x2={isRTL ? '1' : '0'} y2='0'>
                 {linearGradient}
               </LinearGradient>
             </Defs>
             {/* I was using a Mask here to remove part of each side (same size as now, sum of related corners), but,
               just moving the rectangle outside its viewbox is already a mask!! -> svg overflow is cutten away. <- */}
-            <Rect  style={{opacity:0.5}}  width={distance} height={height} fill={`url(#start.${idSuffix})`} y={-sumDps(topStart, bottomStart)}/>
+            <Rect  style={{opacity:opacityVal}}  width={distance} height={height} fill={`url(#start.${idSuffix})`} y={-sumDps(topStart, bottomStart)}/>
           </Svg>)}
       {activeSides.end && (typeof height === 'number' ? height > topEnd + bottomEnd : true) && (<Svg width={distanceWithAdditional} height={heightWithAdditional} style={{ position: 'absolute', start: width, top: topEnd }}>
           <Defs>
-            <LinearGradient style={{opacity:0.5}} id={`end.${idSuffix}`} x1={isRTL ? '1' : '0'} y1='0' x2={isRTL ? '0' : '1'} y2='0'>
+            <LinearGradient style={{opacity:opacityVal}} id={`end.${idSuffix}`} x1={isRTL ? '1' : '0'} y1='0' x2={isRTL ? '0' : '1'} y2='0'>
               {linearGradient}
             </LinearGradient>
           </Defs>
-          <Rect style={{opacity:0.5}}  width={distance} height={height} fill={`url(#end.${idSuffix})`} y={-sumDps(topEnd, bottomEnd)}/>
+          <Rect style={{opacity:opacityVal}}  width={distance} height={height} fill={`url(#end.${idSuffix})`} y={-sumDps(topEnd, bottomEnd)}/>
         </Svg>)}
       {activeSides.top && (typeof width === 'number' ? width > topStart + topEnd : true) && (<Svg width={widthWithAdditional} height={distanceWithAdditional} style={Object.assign({ position: 'absolute', top: -distance, start: topStart }, (isRTL && rtlScaleX))}>
           <Defs>
-            <LinearGradient style={{opacity:0.5}}  id={`top.${idSuffix}`} x1='0' y1='1' x2='0' y2='0'>
+            <LinearGradient style={{opacity:opacityVal}}  id={`top.${idSuffix}`} x1='0' y1='1' x2='0' y2='0'>
               {linearGradient}
             </LinearGradient>
           </Defs>
-          <Rect style={{opacity:0.5}}  width={width} height={distance} fill={`url(#top.${idSuffix})`} x={-sumDps(topStart, topEnd)}/>
+          <Rect style={{opacity:opacityVal}}  width={width} height={distance} fill={`url(#top.${idSuffix})`} x={-sumDps(topStart, topEnd)}/>
         </Svg>)}
       {activeSides.bottom &&
             (typeof width === 'number' ? width > bottomStart + bottomEnd : true) && (<Svg width={widthWithAdditional} height={distanceWithAdditional} style={Object.assign({ position: 'absolute', top: height, start: bottomStart }, (isRTL && rtlScaleX))}>
             <Defs>
-              <LinearGradient style={{opacity:0.5}}  id={`bottom.${idSuffix}`} x1='0' y1='0' x2='0' y2='1'>
+              <LinearGradient style={{opacity:opacityVal}}  id={`bottom.${idSuffix}`} x1='0' y1='0' x2='0' y2='1'>
                 {linearGradient}
               </LinearGradient>
             </Defs>
-            <Rect style={{opacity:0.5}}  width={width} height={distance} fill={`url(#bottom.${idSuffix})`} x={-sumDps(bottomStart, bottomEnd)}/>
+            <Rect style={{opacity:opacityVal}}  width={width} height={distance} fill={`url(#bottom.${idSuffix})`} x={-sumDps(bottomStart, bottomEnd)}/>
           </Svg>)}
     </>);
     /* The anchor for the svgs path is the top left point in the corner square.
@@ -282,7 +284,7 @@ function getShadow({ safeRender, width, height, isRTL, distanceProp = 10, startC
                 shadowRadius: topStartShadow,
             })}
           </Defs>
-          <Rect style={{opacity:0.5}} fill={`url(#topStart.${idSuffix})`} width={topStartShadow} height={topStartShadow}/>
+          <Rect style={{opacity:opacityVal}} fill={`url(#topStart.${idSuffix})`} width={topStartShadow} height={topStartShadow}/>
         </Svg>)}
       {activeCorners.topEnd && topEndShadow > 0 && (<Svg width={topEndShadow + additional} height={topEndShadow + additional} style={{
                 position: 'absolute',
@@ -299,7 +301,7 @@ function getShadow({ safeRender, width, height, isRTL, distanceProp = 10, startC
                 shadowRadius: topEndShadow,
             })}
           </Defs>
-          <Rect style={{opacity:0.5}}  fill={`url(#topEnd.${idSuffix})`} width={topEndShadow} height={topEndShadow}/>
+          <Rect style={{opacity:opacityVal}}  fill={`url(#topEnd.${idSuffix})`} width={topEndShadow} height={topEndShadow}/>
         </Svg>)}
       {activeCorners.bottomStart && bottomStartShadow > 0 && (<Svg width={bottomStartShadow + additional} height={bottomStartShadow + additional} style={{
                 position: 'absolute',
@@ -316,7 +318,7 @@ function getShadow({ safeRender, width, height, isRTL, distanceProp = 10, startC
                 shadowRadius: bottomStartShadow,
             })}
           </Defs>
-          <Rect style={{opacity:0.5}}  fill={`url(#bottomStart.${idSuffix})`} width={bottomStartShadow} height={bottomStartShadow}/>
+          <Rect style={{opacity:opacityVal}}  fill={`url(#bottomStart.${idSuffix})`} width={bottomStartShadow} height={bottomStartShadow}/>
         </Svg>)}
       {activeCorners.bottomEnd && bottomEndShadow > 0 && (<Svg width={bottomEndShadow + additional} height={bottomEndShadow + additional} style={{
                 position: 'absolute',
@@ -333,7 +335,7 @@ function getShadow({ safeRender, width, height, isRTL, distanceProp = 10, startC
                 shadowRadius: bottomEndShadow,
             })}
           </Defs>
-          <Rect style={{opacity:0.5}}  fill={`url(#bottomEnd.${idSuffix})`} width={bottomEndShadow} height={bottomEndShadow}/>
+          <Rect style={{opacity:opacityVal}}  fill={`url(#bottomEnd.${idSuffix})`} width={bottomEndShadow} height={bottomEndShadow}/>
         </Svg>)}
     </>);
     /**
@@ -352,13 +354,13 @@ function getShadow({ safeRender, width, height, isRTL, distanceProp = 10, startC
               {/* Paint all white, then black on border external areas to erase them */}
               <Rect width={width} height={height} fill='#fff'/>
               {/* Remove the corners */}
-              <Rect style={{opacity:0.5}}  width={topStart} height={topStart} fill='#000'/>
-              <Rect style={{opacity:0.5}}  width={topEnd} height={topEnd} x={width} transform={`translate(${-topEnd}, 0)`} fill='#000'/>
-              <Rect style={{opacity:0.5}}  width={bottomStart} height={bottomStart} y={height} transform={`translate(0, ${-bottomStart})`} fill='#000'/>
-              <Rect style={{opacity:0.5}}  width={bottomEnd} height={bottomEnd} x={width} y={height} transform={`translate(${-bottomEnd}, ${-bottomEnd})`} fill='#000'/>
+              <Rect style={{opacity:opacityVal}}  width={topStart} height={topStart} fill='#000'/>
+              <Rect style={{opacity:opacityVal}}  width={topEnd} height={topEnd} x={width} transform={`translate(${-topEnd}, 0)`} fill='#000'/>
+              <Rect style={{opacity:opacityVal}}  width={bottomStart} height={bottomStart} y={height} transform={`translate(0, ${-bottomStart})`} fill='#000'/>
+              <Rect style={{opacity:opacityVal}}  width={bottomEnd} height={bottomEnd} x={width} y={height} transform={`translate(${-bottomEnd}, ${-bottomEnd})`} fill='#000'/>
             </Mask>
           </Defs>
-          <Rect style={{opacity:0.5}}  width={width} height={height} mask={`url(#maskInside.${idSuffix})`} fill={startColorWoOpacity} fillOpacity={startColorOpacity}/>
+          <Rect style={{opacity:opacityVal}}  width={width} height={height} mask={`url(#maskInside.${idSuffix})`} fill={startColorWoOpacity} fillOpacity={startColorOpacity}/>
         </>)}
     </Svg>);
     return (<>
